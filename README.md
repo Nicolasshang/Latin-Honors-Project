@@ -1,6 +1,6 @@
 # Latin-Honors-Project
 
-A quick thing we dececided to do for a school project. Yes I know, some of this code is stolen but shhhh we have a deadline to meet.
+A quick thing we dececided to do for a school project. 
 
 Anyways, this project uses spaCy and the CLTK (Classical Language Toolkit), which is developed by the authors of this publication (https://aclanthology.org/2021.acl-demo.3):
 
