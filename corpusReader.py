@@ -31,16 +31,16 @@ class CorpusReader:
     for sentence in sentences:
       print(sentence, "\n")
 
-if __name__ == "__main__":
-  name = input("Enter name: ")
-  reader = CorpusReader()
-  reader.set_name(name)
+# if __name__ == "__main__":
+#   name = input("Enter name: ")
+#   reader = CorpusReader()
+#   reader.set_name(name)
 
-  choice = input("I to import corpus, R to read")
+#   choice = input("I to import corpus, R to read")
 
-  if choice == "R":
-    start = int(input("Enter starting index: "))
-    end = int(input("Enter end index: "))
-    reader.read_corpus(start, end)
-  else:
-    reader.import_corpus(name)
+#   if choice == "R":
+#     start = int(input("Enter starting index: "))
+#     end = int(input("Enter end index: "))
+#     reader.read_corpus(start, end)
+#   else:
+#     reader.import_corpus(name)
