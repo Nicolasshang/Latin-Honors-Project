@@ -14,9 +14,11 @@ class CorpusReader:
   def set_name(self, name):
     self.name = name
 
+  # Import treebanks from the CLTK repo
   def import_corpus(self, name):
     self.corpus_importer.input_corpus(name)
 
+  # Read the sentences from index start to index end
   def read_corpus(self, start, end):
     corpus_reader = get_corpus_reader(corpus_name = self.name, language = "latin")
 
@@ -37,8 +39,8 @@ if __name__ == "__main__":
   choice = input("I to import corpus, R to read")
 
   if choice == "R":
-    start = int(input("Enter start: "))
-    end = int(input("Enter end: "))
+    start = int(input("Enter starting index: "))
+    end = int(input("Enter end index: "))
     reader.read_corpus(start, end)
   else:
     reader.import_corpus(name)
