@@ -10,9 +10,6 @@ class CorpusReader:
   
   def get_corpora(self):
     print(self.corpus_importer.list_corpora)
-  
-  def set_name(self, name):
-    self.name = name
 
   # Import treebanks from the CLTK repo
   def import_corpus(self, name):
