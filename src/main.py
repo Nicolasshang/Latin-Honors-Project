@@ -2,6 +2,7 @@ from cltk.stem.latin.j_v import JVReplacer
 from cltk.stem.latin.declension import CollatinusDecliner
 from cltk.lemmatize.latin.backoff import BackoffLatinLemmatizer
 from cltk.prosody.latin.macronizer import Macronizer
+from cltk.tokenize.line import LineTokenizer
 import re
 
 # pl.txt is usually the test data
@@ -51,9 +52,14 @@ def macronize(text):
   text = macronizer.macronize_text(text)
   return text
 
+def line_tokenization(text):
+  tokenizer = LineTokenizer("latin")
+  text = tokenizer.tokenize(text)
+
 if __name__ == "__main__":
   text = read("pl.txt")
   text = replace_jv(text)
   text = clean(text)
   text = macronize(text)
-  write("pl_macron.txt", text)
+  print(line_tokenization(text))
+  # write("pl_macron.txt", text)
