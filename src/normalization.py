@@ -88,7 +88,7 @@ def word_tokenize(text):
   return words
 
 if __name__ == "__main__":
-  text = read("pl.txt")
+  text = read("data.txt")
   text = replace_jv(text)
   text = clean(text)
 
