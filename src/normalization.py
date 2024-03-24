@@ -3,6 +3,9 @@ from cltk.stem.latin.declension import CollatinusDecliner
 from cltk.lemmatize.latin.backoff import BackoffLatinLemmatizer
 from cltk.prosody.latin.macronizer import Macronizer
 from cltk.tokenize.line import LineTokenizer
+from cltk.tokenize.latin.sentence import SentenceTokenizer
+from cltk.corpus.utils.formatter import remove_non_latin
+from cltk.tokenize.word import WordTokenizer
 import re
 
 # pl.txt is usually the test data
@@ -29,16 +32,23 @@ def clean(text, lower=False):
   if lower:
     lower_cleaned_data = cleaned_data.lower()
     return (cleaned_data, lower_cleaned_data)
-
+  
   return cleaned_data
 
 # Find all wordforms when given a lemma (usually in the nom. sing.)
 def decline(words):
   decliner = CollatinusDecliner()
-  declined_words = {}
-  for word in words:
-    declined_word = decliner.decline(word)
-    print(declined_word)
+  dec_words = {}
+
+  try:
+    for word in words:
+      dec_word = decliner.decline(word)
+      dec_words[word] = dec_word
+  except:
+    # Skip any word that gives a lemma error or a KeyError
+    Exception
+
+  return dec_words
 
 # Find the lemma using CLTK's backoff lemmatizer
 def find_lemma(tokens):
@@ -52,14 +62,43 @@ def macronize(text):
   text = macronizer.macronize_text(text)
   return text
 
-def line_tokenization(text):
+# Tokenize by line
+def line_tokenize(text):
   tokenizer = LineTokenizer("latin")
   text = tokenizer.tokenize(text)
+  return text
+
+# Tokenize by sentence
+def sentence_tokenize(text, punctuation=True):
+  sentence_tokenizer = SentenceTokenizer()
+  sentences = sentence_tokenizer.tokenize(text)
+  new_sentences = []
+
+  if punctuation:
+    for sent in sentences:
+      new_sentences.append(remove_non_latin(sent).lower())
+    return new_sentences
+  
+  return sentences
+
+# Tokenize by word
+def word_tokenize(text):
+  word_tokenizer = WordTokenizer("latin")
+  words = word_tokenizer.tokenize(text)
+  return words
 
 if __name__ == "__main__":
   text = read("pl.txt")
   text = replace_jv(text)
   text = clean(text)
-  text = macronize(text)
-  print(line_tokenization(text))
-  # write("pl_macron.txt", text)
+
+  # Accessing the first sentence and getting the lemma of each word
+  sentence = sentence_tokenize(text, True)[0]
+  words = find_lemma(word_tokenize(sentence))
+
+  wordforms = []
+  for word in words:
+    wordforms.append(word[1])
+
+  # Getting the lemma + lexeme of any word in the corpus
+  print(decline(wordforms)["filius"])
