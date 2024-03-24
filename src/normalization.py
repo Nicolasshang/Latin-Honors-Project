@@ -25,8 +25,7 @@ def replace_jv(text):
 
 # Deletes everthing in square brackets or parenthesis, and removes excessive whitespace
 def clean(text, lower=False):
-  for i in range(2):
-    text = re.sub(r"([\(\[].*?[\)\]])|( +[\.,:;!])", "", text)
+  text = re.sub(r"([\(\[].*?[\)\]])", "", text)
   cleaned_data = re.sub(r" {2,}", " ", text)
   
   if lower:
@@ -37,18 +36,17 @@ def clean(text, lower=False):
 
 # Find all wordforms when given a lemma (usually in the nom. sing.)
 def decline(words):
-  decliner = CollatinusDecliner()
-  dec_words = {}
+    decliner = CollatinusDecliner()
+    dec_words = {}
 
-  try:
     for word in words:
-      dec_word = decliner.decline(word)
-      dec_words[word] = dec_word
-  except:
-    # Skip any word that gives a lemma error or a KeyError
-    Exception
+      try:
+        dec_word = decliner.decline(word)
+        dec_words[word] = dec_word
+      except:
+        continue
 
-  return dec_words
+    return (dec_words)
 
 # Find the lemma using CLTK's backoff lemmatizer
 def find_lemma(tokens):
@@ -88,17 +86,24 @@ def word_tokenize(text):
   return words
 
 if __name__ == "__main__":
-  text = read("data.txt")
+  # All lemmas in pl.txt
+  lemmas = []
+  words = []
+  text = read("pl.txt")
   text = replace_jv(text)
   text = clean(text)
+  
+  # Separate corpus into sentences
+  sentences = sentence_tokenize(text, True)
 
-  # Accessing the first sentence and getting the lemma of each word
-  sentence = sentence_tokenize(text, True)[0]
-  words = find_lemma(word_tokenize(sentence))
+  # Finding the lemmata of each word and appending them to a list
+  for sentence in sentences:
+    tokens = word_tokenize(sentence)
+    words = find_lemma(tokens)
+    for word in words:
+      new = re.sub(r"\d", "", word[1])
+      lemmas.append(new)
+      print("Done processing: ", new)
 
-  wordforms = []
-  for word in words:
-    wordforms.append(word[1])
-
-  # Getting the lemma + lexeme of any word in the corpus
-  print(decline(wordforms)["filius"])
+  # Declining the lemmata
+  print(decline(lemmas))
