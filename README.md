@@ -1,6 +1,6 @@
 # Latin-Honors-Project
 
-A quick thing we dececided to do for a school project. 
+A quick thing we decided to do for a school project. 
 
 Anyways, this project uses the CLTK (Classical Language Toolkit), which is developed by the authors of this publication (https://aclanthology.org/2021.acl-demo.3):
 
